@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kifayat Shah — Transportation & Civil Engineer</title>
+<meta name="description" content="Kifayat Shah — Transportation Systems & Civil Engineer. MSc Intelligent Transport Systems (TU Munich), BSc Civil Engineering (UET Lahore).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2f5f2;
+    --bg-elevated:#ffffff;
+    --surface:#ffffff;
+    --surface-2:#e9efe9;
+    --line:#d3ddd4;
+    --text:#141b16;
+    --text-muted:#4b5750;
+    --text-faint:#8a978e;
+    --yellow:#e8a020;
+    --yellow-dim:#c98c1e;
+    --green:#0d6b45;
+    --red:#c1432e;
+    --radius:2px;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(20,27,22,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(20,27,22,0.035) 1px, transparent 1px);
+    background-size:64px 64px;
+    pointer-events:none;
+    z-index:0;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--yellow);color:#141b16;}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--yellow);
+    outline-offset:3px;
+  }
+
+  .wrap{max-width:960px;margin:0 auto;padding:0 28px;position:relative;z-index:1;}
+
+  /* ---------- route line (signature element) ---------- */
+  .route-line{
+    position:absolute;
+    left:50%;
+    top:0;
+    bottom:0;
+    width:2px;
+    transform:translateX(-50%);
+    z-index:0;
+    pointer-events:none;
+  }
+  .route-line svg{position:sticky; top:0;}
+
+  /* ---------- eyebrow / labels ---------- */
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--green);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;
+    height:1px;
+    background:var(--green);
+    display:inline-block;
+  }
+
+  /* ---------- top nav ---------- */
+  header.site{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:50;
+    background:rgba(242,245,242,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:960px;
+    margin:0 auto;
+    padding:16px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .nav-mark{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.08em;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .signal{
+    display:inline-flex;
+    flex-direction:column;
+    gap:3px;
+    padding:4px 3px;
+    background:#1c231e;
+    border-radius:3px;
+  }
+  .signal i{
+    width:6px;height:6px;border-radius:50%;
+    background:#3a4740;
+    display:block;
+  }
+  .signal i.r{animation:sigR 4.5s infinite;}
+  .signal i.a{animation:sigA 4.5s infinite;}
+  .signal i.g{animation:sigG 4.5s infinite;}
+  @keyframes sigR{ 0%,33%{background:var(--red);} 34%,100%{background:#3a4740;} }
+  @keyframes sigA{ 33%,38%{background:var(--yellow);} 0%,32%,39%,100%{background:#3a4740;} }
+  @keyframes sigG{ 39%,95%{background:var(--green);} 0%,38%,96%,100%{background:#3a4740;} }
+  @media (prefers-reduced-motion: reduce){
+    .signal i.g{background:var(--green); animation:none;}
+    .signal i.r, .signal i.a{background:#3a4740; animation:none;}
+  }
+  nav.links{display:flex;gap:26px;}
+  nav.links a{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text-muted);
+    letter-spacing:0.04em;
+    transition:color .2s;
+  }
+  nav.links a:hover{color:var(--green);}
+  @media (max-width:640px){ nav.links{display:none;} }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:90px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:36px;
+  }
+  .route-tag{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text-faint);
+    letter-spacing:0.12em;
+    margin-bottom:22px;
+  }
+  .route-tag span{color:var(--green);}
+  h1.name{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(42px, 8vw, 84px);
+    line-height:1.02;
+    letter-spacing:-0.02em;
+    margin-bottom:20px;
+  }
+  h1.name .line2{color:var(--text-muted); display:block; font-weight:500;}
+  .hero-role{
+    font-family:var(--display);
+    font-size:clamp(18px,2.4vw,24px);
+    color:var(--green);
+    font-weight:500;
+    margin-bottom:22px;
+  }
+  .hero-desc{
+    max-width:560px;
+    color:var(--text-muted);
+    font-size:16px;
+    margin-bottom:34px;
+  }
+  .hero-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:40px;
+  }
+  .chip{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:0.03em;
+    color:#f4f7f4;
+    background:var(--green);
+    border:2px solid #f4f7f4;
+    outline:1px solid var(--green);
+    padding:9px 15px;
+    border-radius:5px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 2px 6px rgba(13,107,69,0.18);
+    transition:transform .15s, box-shadow .2s;
+  }
+  .chip:hover{transform:translateY(-2px); box-shadow:0 6px 14px rgba(13,107,69,0.28);}
+  .chip svg{width:13px;height:13px;flex-shrink:0;}
+
+  .hero-cta{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.04em;
+    padding:14px 24px;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    transition:transform .15s, box-shadow .2s, background .2s;
+  }
+  .btn-primary{
+    background:var(--yellow);
+    color:#141b16;
+    font-weight:600;
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 8px 24px rgba(232,160,32,0.28);}
+  .btn-ghost{
+    border:1px solid var(--line);
+    color:var(--text);
+  }
+  .btn-ghost:hover{border-color:var(--text-muted); transform:translateY(-2px);}
+
+  /* road diagram under hero */
+  .road-diagram{
+    margin-top:56px;
+    height:64px;
+    position:relative;
+  }
+  .road-diagram svg{width:100%;height:100%;display:block;}
+  .lane-dash{
+    stroke:#f4f7f4;
+    stroke-width:3;
+    stroke-dasharray:14 14;
+    fill:none;
+    opacity:0.85;
+    animation:dashmove 3.6s linear infinite;
+  }
+  @keyframes dashmove{ to{ stroke-dashoffset:-56; } }
+
+  /* ---------- sections ---------- */
+  section{
+    position:relative;
+    padding:90px 0;
+    border-top:1px solid var(--line);
+  }
+  .section-head{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:20px;
+    align-items:baseline;
+    margin-bottom:48px;
+  }
+  .section-num{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--text-faint);
+  }
+  h2.section-title{
+    font-family:var(--display);
+    font-size:clamp(26px,4vw,36px);
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+
+  /* profile */
+  .profile-text{
+    font-size:18px;
+    color:var(--text-muted);
+    max-width:680px;
+  }
+  .profile-text strong{color:var(--text); font-weight:600;}
+  .profile-stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    margin-top:44px;
+    border:1px solid var(--line);
+  }
+  .stat{
+    background:var(--bg-elevated);
+    padding:24px 20px;
+  }
+  .stat .n{font-family:var(--display); font-size:30px; font-weight:700; color:var(--green);}
+  .stat .l{font-family:var(--mono); font-size:11px; color:var(--text-faint); letter-spacing:0.06em; text-transform:uppercase; margin-top:6px;}
+  @media (max-width:640px){ .profile-stats{grid-template-columns:1fr;} }
+
+  /* experience - route timeline */
+  .route-item{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:24px;
+    padding:28px 0;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .route-item:last-child{border-bottom:none;}
+  .route-marker{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text-faint);
+  }
+  .route-marker .exit{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;height:38px;
+    border:1.5px solid var(--yellow-dim);
+    border-radius:50%;
+    color:var(--green);
+    font-weight:600;
+    font-size:13px;
+    margin-bottom:10px;
+  }
+  .route-item.current .route-marker .exit{
+    background:var(--yellow);
+    color:#141b16;
+    box-shadow:0 0 0 4px rgba(232,160,32,0.18);
+  }
+  .route-body h3{
+    font-family:var(--display);
+    font-size:19px;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .route-body .org{
+    color:var(--green);
+    font-size:14px;
+    font-family:var(--mono);
+    margin-bottom:14px;
+    display:block;
+  }
+  .route-body .status{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--green);
+    border:1px solid var(--green);
+    padding:2px 8px;
+    border-radius:999px;
+    margin-left:10px;
+  }
+  .route-body ul{
+    margin-top:10px;
+    padding-left:0;
+    list-style:none;
+  }
+  .route-body ul li{
+    color:var(--text-muted);
+    font-size:14.5px;
+    padding-left:20px;
+    position:relative;
+    margin-bottom:8px;
+  }
+  .route-body ul li::before{
+    content:"—";
+    position:absolute;
+    left:0;
+    color:var(--text-faint);
+  }
+  @media (max-width:640px){ .route-item{grid-template-columns:1fr;} }
+
+  /* education */
+  .edu-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .edu-card{
+    background:var(--bg-elevated);
+    padding:32px 28px;
+  }
+  .edu-card .deg{
+    font-family:var(--display);
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .edu-card .sch{color:var(--green); font-family:var(--mono); font-size:13px; margin-bottom:4px;}
+  .edu-card .date{color:var(--text-faint); font-family:var(--mono); font-size:12px; margin-bottom:18px;}
+  .edu-card .detail{color:var(--text-muted); font-size:14px; margin-bottom:8px;}
+  .edu-card .detail b{color:var(--text); font-weight:500;}
+  @media (max-width:640px){ .edu-grid{grid-template-columns:1fr;} }
+
+  /* skills */
+  .skills-list{display:flex; flex-direction:column; gap:0;}
+  .skill-row{
+    display:grid;
+    grid-template-columns:200px 1fr;
+    gap:24px;
+    align-items:center;
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .skill-row .sk-name{font-family:var(--display); font-weight:600; font-size:15px;}
+  .skill-row .sk-desc{color:var(--text-muted); font-size:13.5px;}
+  @media (max-width:640px){ .skill-row{grid-template-columns:1fr; gap:6px;} }
+
+  /* certifications */
+  .cert-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .cert-card{background:var(--bg-elevated); padding:22px 20px;}
+  .cert-card .cname{font-family:var(--display); font-weight:600; font-size:14.5px; margin-bottom:8px;}
+  .cert-card .cissuer{font-family:var(--mono); font-size:11.5px; color:var(--text-faint);}
+  @media (max-width:760px){ .cert-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:480px){ .cert-grid{grid-template-columns:1fr;} }
+
+  /* languages */
+  .lang-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .lang-card{background:var(--bg-elevated); padding:20px 14px; text-align:center;}
+  .lang-card .lname{font-family:var(--display); font-weight:600; font-size:14px; margin-bottom:10px;}
+  .lang-card .lbar{height:4px; background:var(--surface-2); border-radius:2px; overflow:hidden; margin-bottom:8px;}
+  .lang-card .lbar span{display:block; height:100%; background:var(--yellow);}
+  .lang-card .llevel{font-family:var(--mono); font-size:11px; color:var(--text-faint);}
+  @media (max-width:640px){ .lang-grid{grid-template-columns:repeat(2,1fr);} }
+
+  /* contact / footer */
+  .contact-section{
+    text-align:left;
+    padding-bottom:60px;
+  }
+  .contact-title{
+    font-family:var(--display);
+    font-size:clamp(32px,6vw,54px);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin-bottom:20px;
+    max-width:640px;
+  }
+  .contact-title .accent{color:var(--green);}
+  .contact-desc{color:var(--text-muted); max-width:520px; margin-bottom:36px; font-size:16px;}
+  .contact-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-top:20px;
+  }
+  .contact-item{
+    background:var(--bg-elevated);
+    padding:20px 22px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    transition:background .2s;
+  }
+  .contact-item:hover{background:var(--surface-2);}
+  .contact-item svg{width:18px;height:18px;color:var(--green); flex-shrink:0;}
+  .contact-item .ci-label{font-family:var(--mono); font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.06em;}
+  .contact-item .ci-value{font-size:14px; color:var(--text);}
+  @media (max-width:640px){ .contact-grid{grid-template-columns:1fr;} }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:28px 0;
+  }
+  .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--text-faint);
+  }
+
+  /* reveal animation */
+  .reveal{
+    opacity:0;
+    transform:translateY(16px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .lane-dash{animation:none;}
+    .reveal{transition:none; opacity:1; transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-inner">
+    <div class="nav-mark"><span class="signal"><i class="r"></i><i class="a"></i><i class="g"></i></span>K.SHAH — CIVIL/63712</div>
+    <nav class="links">
+      <a href="#profile">Profile</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none; padding-top:90px;">
+    <div class="route-tag">BASED IN ISLAMABAD, PK <span>·</span> OPEN TO RELOCATION — ANY DESTINATION</div>
+    <h1 class="name">KIFAYAT SHAH<span class="line2">Transportation &amp; Civil Engineer</span></h1>
+    <div class="hero-role">Intelligent Transport Systems · Traffic &amp; Network Modeling</div>
+    <p class="hero-desc">
+      MSc in Transportation Systems (Technical University of Munich) and BSc in Civil Engineering
+      (UET Lahore). Currently a Summer Scholar in the Infrastructure Section of Pakistan's Ministry
+      of Planning, working on motorway, dry-port and CPEC intermodal connectivity. Looking to bring
+      that experience to civil, transportation, ITS and transport-planning roles — open to
+      relocating anywhere for the right opportunity.
+    </p>
+    <div class="hero-meta">
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M2 6h20M2 18h20"/></svg>PEC CIVIL/63712</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>English C1 · Urdu C2</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>PTV VISSIM · VISUM · SIDRA</span>
+    </div>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="mailto:Kifayatshah115@gmail.com">Email me →</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/kifayatshahkp" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://github.com/kifayatshah" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <div class="road-diagram" aria-hidden="true">
+      <svg viewBox="0 0 900 64" preserveAspectRatio="none">
+        <rect x="0" y="18" width="900" height="28" fill="#2b332e" opacity="0.9"/>
+        <line class="lane-dash" x1="0" y1="32" x2="900" y2="32"/>
+        <circle cx="60" cy="32" r="5" fill="var(--red)"/>
+        <circle cx="330" cy="32" r="5" fill="var(--yellow)"/>
+        <circle cx="600" cy="32" r="5" fill="var(--yellow)"/>
+        <circle cx="850" cy="32" r="5" fill="var(--green)"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="profile">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Profile</h2>
+    </div>
+    <p class="profile-text reveal">
+      A <strong>transportation and roads engineer</strong> who moved from designing signalized
+      intersections in Bavarian towns to reviewing Pakistan's industrial-hub connectivity with
+      motorways, dry ports, and CPEC routes. Comfortable moving between microsimulation software,
+      GIS, and policy writing — the full stack from a single intersection to a national logistics
+      framework.
+    </p>
+    <div class="profile-stats reveal">
+      <div class="stat"><div class="n">2</div><div class="l">Engineering Degrees</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">Countries Worked / Studied In</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">Languages Spoken</div></div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Experience — Route Log</h2>
+    </div>
+
+    <div class="route-item current reveal">
+      <div class="route-marker"><span class="exit">03</span>Jul – Aug 2026</div>
+      <div class="route-body">
+        <h3>Summer Scholar <span class="status">Current</span></h3>
+        <span class="org">Ministry of Planning, Development &amp; Special Initiatives — Pakistan</span>
+        <ul>
+          <li>Reviewing nationwide industrial-hub connectivity with motorways, dry ports and CPEC routes</li>
+          <li>Contributing to the national Intermodal Connectivity &amp; Logistics Competitiveness policy under the URAAN development framework</li>
+          <li>Recommending rail/road interventions to improve export-oriented logistics efficiency</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="route-item reveal">
+      <div class="route-marker"><span class="exit">02</span>Apr – Jun 2025</div>
+      <div class="route-body">
+        <h3>Intern</h3>
+        <span class="org">Habib Construction Pvt Ltd</span>
+        <ul>
+          <li>Assisted in AutoCAD drafting</li>
+          <li>Assisted in site supervision and progress reporting</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="route-item reveal">
+      <div class="route-marker"><span class="exit">01</span>Apr – May 2020</div>
+      <div class="route-body">
+        <h3>Exam Supervisor</h3>
+        <span class="org">St. — (Lahore, Pakistan)</span>
+        <ul>
+          <li>Trained in examination supervision protocol</li>
+          <li>Conducted examination invigilation in a controlled, professional environment</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Education</h2>
+    </div>
+    <div class="edu-grid reveal">
+      <div class="edu-card">
+        <div class="deg">MSc Transportation Systems</div>
+        <div class="sch">Technical University of Munich, Germany</div>
+        <div class="date">Oct 2022 — Jun 2025</div>
+        <div class="detail"><b>Field:</b> Intelligent Transport Systems</div>
+        <div class="detail"><b>Thesis:</b> Investigation into traffic performance under MFD-based perimeter control</div>
+        <div class="detail"><b>Attestation:</b> Apostille (Rathaus Munich), HEC Equivalency Certificate</div>
+      </div>
+      <div class="edu-card">
+        <div class="deg">BSc Civil Engineering</div>
+        <div class="sch">University of Engineering &amp; Technology, Lahore</div>
+        <div class="date">Sep 2017 — Aug 2021</div>
+        <div class="detail"><b>Final Year Project:</b> Investigation of downstream floor level of Jinnah Barrage</div>
+        <div class="detail"><b>Attestation:</b> Higher Education Commission (HEC)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Toolkit</h2>
+    </div>
+    <div class="skills-list reveal">
+      <div class="skill-row"><div class="sk-name">PTV VISSIM / SIDRA</div><div class="sk-desc">Designed signalized intersections in Miesbach, Göttingen and Ingolstadt, Germany</div></div>
+      <div class="skill-row"><div class="sk-name">PTV VISUM</div><div class="sk-desc">Alternative route planning and public transport utilization modeling, Göttingen</div></div>
+      <div class="skill-row"><div class="sk-name">Python</div><div class="sk-desc">Traffic data analysis for MSc thesis and multiple coursework projects</div></div>
+      <div class="skill-row"><div class="sk-name">R</div><div class="sk-desc">Analysis of high-resolution drone-captured traffic data</div></div>
+      <div class="skill-row"><div class="sk-name">GIS</div><div class="sk-desc">Spatial analysis for network and connectivity planning</div></div>
+      <div class="skill-row"><div class="sk-name">AutoCAD</div><div class="sk-desc">Drafting retaining-wall sections across multiple projects</div></div>
+      <div class="skill-row"><div class="sk-name">MS Office</div><div class="sk-desc">Technical writing and presentation for BSc and MSc theses</div></div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Certifications</h2>
+    </div>
+    <div class="cert-grid reveal">
+      <div class="cert-card"><div class="cname">Microsoft Office Suite</div><div class="cissuer">KPSDP Pakistan · 2025</div></div>
+      <div class="cert-card"><div class="cname">AutoCAD</div><div class="cissuer">DigiSkills Pakistan · 2020</div></div>
+      <div class="cert-card"><div class="cname">Python</div><div class="cissuer">ReDI School Munich · 2024</div></div>
+      <div class="cert-card"><div class="cname">GIS</div><div class="cissuer">LinkedIn Learning · 2025</div></div>
+      <div class="cert-card"><div class="cname">PTV VISUM</div><div class="cissuer">Udemy · 2025</div></div>
+    </div>
+  </section>
+
+  <!-- LANGUAGES -->
+  <section id="languages">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Languages</h2>
+    </div>
+    <div class="lang-grid reveal">
+      <div class="lang-card"><div class="lname">Urdu</div><div class="lbar"><span style="width:100%"></span></div><div class="llevel">C2</div></div>
+      <div class="lang-card"><div class="lname">Pashto</div><div class="lbar"><span style="width:100%"></span></div><div class="llevel">C2</div></div>
+      <div class="lang-card"><div class="lname">English</div><div class="lbar"><span style="width:80%"></span></div><div class="llevel">C1</div></div>
+      <div class="lang-card"><div class="lname">German</div><div class="lbar"><span style="width:35%"></span></div><div class="llevel">A2</div></div>
+      <div class="lang-card"><div class="lname">Arabic</div><div class="lbar"><span style="width:18%"></span></div><div class="llevel">A1</div></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Destination</h2>
+    </div>
+    <div class="contact-title reveal">Open to civil, transportation &amp; ITS roles — <span class="accent">anywhere</span> the right one is.</div>
+    <p class="contact-desc reveal">Certified Engineer, Pakistan Engineering Council. Available for relocation. Reach out directly below.</p>
+
+    <div class="contact-grid reveal">
+      <a class="contact-item" href="mailto:Kifayatshah115@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg>
+        <div><div class="ci-label">Email</div><div class="ci-value">Kifayatshah115@gmail.com</div></div>
+      </a>
+      <a class="contact-item" href="https://wa.me/923431193143" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 20l1.1-5.5A8.5 8.5 0 1 1 21 11.5z"/></svg>
+        <div><div class="ci-label">WhatsApp</div><div class="ci-value">+92 343 1193143</div></div>
+      </a>
+      <a class="contact-item" href="https://www.linkedin.com/in/kifayatshahkp" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 9h4v2a4 4 0 0 1 8 0v10h-4v-9a2 2 0 0 0-4 0v9h-4z"/></svg>
+        <div><div class="ci-label">LinkedIn</div><div class="ci-value">/in/kifayatshahkp</div></div>
+      </a>
+      <a class="contact-item" href="https://github.com/kifayatshah" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-1-2.6c3 0 6-2 6-5.5 0-1.3-.5-2.5-1.3-3.4.1-.3.6-1.6-.1-3.4 0 0-1.1-.3-3.5 1.3a12 12 0 0 0-6.4 0C6.5 5.3 5.4 5.6 5.4 5.6c-.7 1.8-.2 3.1-.1 3.4A5.4 5.4 0 0 0 4 12.5C4 16 7 18 10 18a3.4 3.4 0 0 0-1 2.6V24"/></svg>
+        <div><div class="ci-label">GitHub</div><div class="ci-value">github.com/kifayatshah</div></div>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© 2026 KIFAYAT SHAH — CIVIL/63712</span>
+    <span>SIGNAL STATUS: OPEN TO RELOCATION</span>
+  </div>
+</footer>
+
+<script>
+  // scroll reveal
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.12});
+  els.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
