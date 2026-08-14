@@ -41,14 +41,66 @@
     position:fixed;
     inset:0;
     background-image:
-      linear-gradient(rgba(20,27,22,0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(20,27,22,0.035) 1px, transparent 1px);
+      linear-gradient(rgba(20,27,22,0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(20,27,22,0.028) 1px, transparent 1px);
     background-size:64px 64px;
     pointer-events:none;
     z-index:0;
   }
+
+  /* Transportation-themed visual rail */
+  .traffic-visuals{
+    position:fixed;
+    top:82px;
+    right:0;
+    width:min(31vw,430px);
+    height:calc(100vh - 82px);
+    display:grid;
+    grid-template-rows:1.15fr 1fr 1fr;
+    gap:10px;
+    padding:10px 0 10px 10px;
+    z-index:0;
+    pointer-events:none;
+    opacity:.30;
+    overflow:hidden;
+    mask-image:linear-gradient(to right, transparent 0%, #000 18%, #000 100%);
+    -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 18%, #000 100%);
+  }
+  .traffic-visual{
+    min-height:0;
+    border-radius:18px 0 0 18px;
+    background-size:cover;
+    background-position:center;
+    filter:saturate(.82) contrast(1.02);
+    box-shadow:0 12px 30px rgba(20,27,22,.12);
+  }
+  .traffic-visual-highway{
+    background-image:url("https://commons.wikimedia.org/wiki/Special:FilePath/View_of_the_German_federal_highway_A11.jpg?width=1400");
+    background-position:center 58%;
+  }
+  .traffic-visual-urban{
+    background-image:url("https://commons.wikimedia.org/wiki/Special:FilePath/Lascar_Potsdamer_Platz_and_the_replica_of_Germany%27s_first_traffic_lights_%284471509359%29.jpg?width=1400");
+  }
+  .traffic-visual-signal{
+    background-image:url("https://commons.wikimedia.org/wiki/Special:FilePath/Traffic_Light_German_Complex_With_Bicycles.JPG?width=1400");
+  }
+  @media (max-width:900px){
+    .traffic-visuals{opacity:.11;width:38vw;}
+  }
+  @media (max-width:640px){
+    .traffic-visuals{display:none;}
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg, rgba(242,245,242,.96) 0%, rgba(242,245,242,.86) 48%, rgba(242,245,242,.45) 100%);
+    pointer-events:none;
+    z-index:-1;
+  }
   a{color:inherit;text-decoration:none;}
   ::selection{background:var(--yellow);color:#141b16;}
+  .image-credit{position:relative;z-index:2;max-width:960px;margin:8px auto 28px;padding:0 28px;font:10px/1.5 var(--mono);color:var(--text-faint);text-align:right;}
 
   /* focus visibility */
   a:focus-visible, button:focus-visible{
@@ -347,6 +399,15 @@
     font-weight:600;
     margin-bottom:4px;
   }
+  .route-body .project-tag{
+    display:inline-block;
+    margin-top:8px;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--green);
+  }
   .route-body .org{
     color:var(--green);
     font-size:14px;
@@ -522,12 +583,18 @@
 </head>
 <body>
 
+  <div class="traffic-visuals" aria-hidden="true">
+    <div class="traffic-visual traffic-visual-highway"></div>
+    <div class="traffic-visual traffic-visual-urban"></div>
+    <div class="traffic-visual traffic-visual-signal"></div>
+  </div>
+
 <header class="site">
   <div class="nav-inner">
     <div class="nav-mark"><span class="signal"><i class="r"></i><i class="a"></i><i class="g"></i></span>K.SHAH — CIVIL/63712</div>
     <nav class="links">
       <a href="#profile">Profile</a>
-      <a href="#experience">Experience</a>
+      <a href="#experience">Experience &amp; Projects</a>
       <a href="#education">Education</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
@@ -545,9 +612,9 @@
     <p class="hero-desc">
       MSc in Transportation Systems (Technical University of Munich) and BSc in Civil Engineering
       (UET Lahore). Currently a Summer Scholar in the Infrastructure Section of Pakistan's Ministry
-      of Planning, working on motorway, dry-port and CPEC intermodal connectivity. Looking to bring
-      that experience to civil, transportation, ITS and transport-planning roles — open to
-      relocating anywhere for the right opportunity.
+      of Planning, with a focus on transport infrastructure and logistics connectivity. Combining
+      traffic microsimulation, network modelling, data analysis and transport planning to support
+      evidence-based mobility solutions — open to civil, transportation and ITS opportunities.
     </p>
     <div class="hero-meta">
       <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M2 6h20M2 18h20"/></svg>PEC CIVIL/63712</span>
@@ -596,7 +663,7 @@
   <section id="experience">
     <div class="section-head">
       <span class="section-num">02</span>
-      <h2 class="section-title">Experience — Route Log</h2>
+      <h2 class="section-title">Experience &amp; Selected Projects</h2>
     </div>
 
     <div class="route-item current reveal">
@@ -625,13 +692,25 @@
     </div>
 
     <div class="route-item reveal">
-      <div class="route-marker"><span class="exit">01</span>Apr – May 2020</div>
+      <div class="route-marker"><span class="exit">01</span>Traffic Engineering<br>Project</div>
       <div class="route-body">
-        <h3>Exam Supervisor</h3>
-        <span class="org">St. — (Lahore, Pakistan)</span>
+        <h3>Traffic Modelling &amp; Network Planning</h3>
+        <span class="org">Göttingen, Germany · Technical University of Munich</span>
         <ul>
-          <li>Trained in examination supervision protocol</li>
-          <li>Conducted examination invigilation in a controlled, professional environment</li>
+          <li>Evaluated private-transport and cycling measures using the provided VISUM model, including ring-road lane reduction and alternative “New Ring” scenarios.</li>
+          <li>Built and calibrated a microscopic model of the Weender Landstraße–Kreuzbergring–Güterbahnhofstraße intersection and tested existing and modified signal-control plans.</li>
+          <li>Planned an improved public-transport network by evaluating route clarity, connections, demand fitness, operating cost and peak-hour bus occupancy.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="route-item reveal">
+      <div class="route-marker"><span class="exit">01</span>Selected Project</div>
+      <div class="route-body">
+        <h3>Influencing Travel Behaviour Using Traffic Control Measures in the County of Miesbach, Germany</h3>
+        <span class="org">Miesbach, Germany · Technical University of Munich</span>
+        <ul>
+          <li><strong>Simulation:</strong> Used PTV VISSIM to model traffic conditions and evaluate traffic-control scenarios and their influence on travel behaviour and network performance.</li>
         </ul>
       </div>
     </div>
@@ -656,7 +735,6 @@
         <div class="deg">BSc Civil Engineering</div>
         <div class="sch">University of Engineering &amp; Technology, Lahore</div>
         <div class="date">Sep 2017 — Aug 2021</div>
-        <div class="detail"><b>Final Year Project:</b> Investigation of downstream floor level of Jinnah Barrage</div>
         <div class="detail"><b>Attestation:</b> Higher Education Commission (HEC)</div>
       </div>
     </div>
@@ -744,6 +822,7 @@
   <div class="wrap footer-inner">
     <span>© 2026 KIFAYAT SHAH — CIVIL/63712</span>
     <span>SIGNAL STATUS: OPEN TO RELOCATION</span>
+    <span>BACKGROUND IMAGERY: WIKIMEDIA COMMONS / CC0</span>
   </div>
 </footer>
 
@@ -756,5 +835,6 @@
   els.forEach(el=>io.observe(el));
 </script>
 
+  <div class="image-credit">Photography: Wikimedia Commons — A11 motorway (CC BY-SA 4.0), Potsdamer Platz traffic intersection, and German traffic-light system (public-domain/CC licensed sources).</div>
 </body>
 </html>
